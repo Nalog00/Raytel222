@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="uz.raytel.raytel.ui.main.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_paymentConfirmFragment"
+            app:destination="@id/paymentConfirmFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_shopBottomSheetDialog"
+            app:destination="@id/shopBottomSheetDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentConfirmFragment"
+        android:name="uz.raytel.raytel.ui.confirm.PaymentConfirmFragment"
+        android:label="fragment_confirm_payment"
+        tools:layout="@layout/fragment_confirm_payment" />
+    <dialog
+        android:id="@+id/shopBottomSheetDialog"
+        android:name="uz.raytel.raytel.ui.dialog.ShopBottomSheetDialog"
+        android:label="bottom_sheet_shop"
+        tools:layout="@layout/bottom_sheet_shop" />
+</navigation>

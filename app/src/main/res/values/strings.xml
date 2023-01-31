@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Raytel</string>
+    <string name="text_online">%d online</string>
+    <string name="raytel">Raytel</string>
+    <string name="text_screenshot">Screenshot</string>
+    <string name="raytel_uz_site">Raytel.uz</string>
+    <string name="raytel_uz_phone">93 366 33 99</string>
+    <string name="raytel_uz_username">\@rayteluz</string>
+    <string name="text_phone_number">Telefon nomer</string>
+    <string name="text_confirm">Tastıyıqlaw</string>
+    <string name="text_continue">Dawam etiw</string>
+    <string name="text_lock_warning">Bloktaǵı barlıq súwretti kóriw ushın dizimnen ótiń</string>
+    <string name="text_resend">Qaytaldan jiberiw</string>
+    <string name="text_new">New</string>
+    <string name="text_choose_photo">Súwret saylaw</string>
+    <string name="raytel_uz_phone_full">+998 93 366 33 99</string>
+    <string name="text_finish">Juwmaqlaw</string>
+    <string name="text_input_password">Parol kiritiń</string>
+    <string name="text_input_username">Atıńızdı kiritiń</string>
+    <string name="text_photo_not_selected">Súwret saylanbadı</string>
+    <string name="text_photo_selected">Súwret saylandı</string>
+    <string name="text_upload_hint">Plastik nomerge pul ótkerip, skrinshotın júkleń</string>
+    <string name="text_bank_details">8600 1234 5678 9123\nAbdullaev Dawletiyar</string>
+    <string name="text_cost">22 000 swm</string>
+    <string name="text_slogan">Siz de zamannan artta qalmań!</string>
+    <string name="text_confirm_message">Bloktaǵı barlıq súwretlerdi kóriw ushın pullı dizimnen ótiwińiz kerek. Sol arqalı bizdegi barlıq magazinlerdiń ónimlerin kóriwińiz múmkin.</string>
+</resources>
