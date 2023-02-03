@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/main_bg_color"
     tools:context=".ui.confirm.PaymentConfirmFragment">
 
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_message"
+        android:id="@+id/tv_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
     <TextView
-        android:id="@+id/tv_slogan"
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -39,10 +39,10 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_message" />
+        app:layout_constraintTop_toBottomOf="@id/tv_description" />
 
     <TextView
-        android:id="@+id/tv_cost"
+        android:id="@+id/tv_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -52,7 +52,7 @@
         android:textColor="@color/red"
         android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_slogan" />
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
     <TextView
         android:id="@+id/tv_bank_details"
@@ -68,10 +68,10 @@
         app:drawableEndCompat="@drawable/ic_copy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_cost" />
+        app:layout_constraintTop_toBottomOf="@id/tv_price" />
 
     <TextView
-        android:id="@+id/tv_upload_hint"
+        android:id="@+id/tv_end_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -92,7 +92,7 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_upload_hint" />
+        app:layout_constraintTop_toBottomOf="@id/tv_end_text" />
 
     <TextView
         android:id="@+id/tv_file_status"

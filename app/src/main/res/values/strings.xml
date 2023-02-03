@@ -20,8 +20,10 @@
     <string name="text_photo_not_selected">Súwret saylanbadı</string>
     <string name="text_photo_selected">Súwret saylandı</string>
     <string name="text_upload_hint">Plastik nomerge pul ótkerip, skrinshotın júkleń</string>
-    <string name="text_bank_details">8600 1234 5678 9123\nAbdullaev Dawletiyar</string>
-    <string name="text_cost">22 000 swm</string>
+    <string name="text_bank_details">%s\n%s</string>
+    <string name="text_cost">%d swm</string>
     <string name="text_slogan">Siz de zamannan artta qalmań!</string>
     <string name="text_confirm_message">Bloktaǵı barlıq súwretlerdi kóriw ushın pullı dizimnen ótiwińiz kerek. Sol arqalı bizdegi barlıq magazinlerdiń ónimlerin kóriwińiz múmkin.</string>
+    <string name="text_sign_up">Dizimnen ótiw</string>
+    <string name="text_sign_in">Akkauntqa kiriw</string>
 </resources>
