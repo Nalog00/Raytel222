@@ -21,9 +21,15 @@
     <string name="text_photo_selected">Súwret saylandı</string>
     <string name="text_upload_hint">Plastik nomerge pul ótkerip, skrinshotın júkleń</string>
     <string name="text_bank_details">%s\n%s</string>
-    <string name="text_cost">%d swm</string>
+    <string name="text_cost">%s swm</string>
     <string name="text_slogan">Siz de zamannan artta qalmań!</string>
     <string name="text_confirm_message">Bloktaǵı barlıq súwretlerdi kóriw ushın pullı dizimnen ótiwińiz kerek. Sol arqalı bizdegi barlıq magazinlerdiń ónimlerin kóriwińiz múmkin.</string>
     <string name="text_sign_up">Dizimnen ótiw</string>
     <string name="text_sign_in">Akkauntqa kiriw</string>
+    <string name="error_invalid_phone_number">Nadurıs telefon nomer kiritildi!</string>
+    <string name="error_required_field">Toltırılıwı shárt</string>
+    <string name="text_get_code">Kod alıw</string>
+    <string name="error_invalid_confirm_code">Tekseriw kodı nadurıs kiritildi!</string>
+    <string name="error_verification_code_not_sent_yet">Ele tekseriw kodı jiberilmedi!</string>
+    <string name="error_image_not_selected">Súwret saylanbadı!</string>
 </resources>

@@ -1,7 +1,7 @@
-package uz.raytel.raytel.data.product
+package uz.raytel.raytel.data.remote.product
 
 import com.google.gson.annotations.SerializedName
-import uz.raytel.raytel.data.store.Store
+import uz.raytel.raytel.data.remote.store.Store
 
 data class Product(
     val id: Int,

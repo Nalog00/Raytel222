@@ -1,4 +1,4 @@
-package uz.raytel.raytel.data.store
+package uz.raytel.raytel.data.remote.store
 
 data class Store(
     val id: Int,

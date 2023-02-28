@@ -6,6 +6,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -47,9 +48,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'androidx.work:work-runtime-ktx:2.8.0'
 
     /**
      * Retrofit*/
@@ -113,4 +117,9 @@ dependencies {
         exclude group: 'androidx.appcompat', module: 'appcompat'
     }
 
+    // ImagePicker
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
+
+    // MediaPicker
+    implementation 'com.robertlevonyan.components:Picker:2.1.6'
 }

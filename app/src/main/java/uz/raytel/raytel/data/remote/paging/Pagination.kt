@@ -1,4 +1,4 @@
-package uz.raytel.raytel.data.paging
+package uz.raytel.raytel.data.remote.paging
 
 import com.google.gson.annotations.SerializedName
 

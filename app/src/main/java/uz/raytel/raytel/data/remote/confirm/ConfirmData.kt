@@ -1,4 +1,4 @@
-package uz.raytel.raytel.data.confirm
+package uz.raytel.raytel.data.remote.confirm
 
 import com.google.gson.annotations.SerializedName
 

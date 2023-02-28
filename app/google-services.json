@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1038267377183",
+    "project_id": "raytel-8a22d",
+    "storage_bucket": "raytel-8a22d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038267377183:android:7f86dbf091b82b9d77d72a",
+        "android_client_info": {
+          "package_name": "uz.raytel.raytel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038267377183-so6v6nuhei2a3n6vgs28gu8ub38dim5j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.raytel.raytel",
+            "certificate_hash": "894f2809b563160b42e9ba895f4cdce6f153251e"
+          }
+        },
+        {
+          "client_id": "1038267377183-u5pi98uet1fo759v8l9c6r5cpdogk3hq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7wEz05Sj4Ku5296jkpI5YvhjdhPj5gzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038267377183-u5pi98uet1fo759v8l9c6r5cpdogk3hq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
