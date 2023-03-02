@@ -181,9 +181,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 if (it.pagination.currentPage == 1) {
                     adapter.models.clear()
                     products.clear()
+                    products = it.data.toMutableList()
+                    adapter.models = it.data.toMutableList()
+                } else {
+                    products.addAll(it.data)
+                    adapter.addItems(it.data)
                 }
-                products.addAll(it.data)
-                adapter.addItems(it.data)
             }.launchIn(lifecycleScope)
 
             bottomShopListCloseFlow.onEach {

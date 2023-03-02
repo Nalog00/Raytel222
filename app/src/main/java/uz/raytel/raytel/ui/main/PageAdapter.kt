@@ -60,6 +60,9 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
                     storeClick.invoke(model.store.id)
                 }
 
+                ivLogo.isEnabled = localStorage.signedIn
+                tvShopName.isEnabled = localStorage.signedIn
+
                 btnScreenshot.click {
                     onSaveButtonClick.invoke(model)
                 }
@@ -79,7 +82,7 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
 
         private fun showLockScreen() {
             binding.apply {
-                // todo: blur bg
+//                ivImage.setBlur(10)
 
                 tvNew.hide()
                 ivLogo.hide()
@@ -99,7 +102,7 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
 
         private fun hideLockScreen() {
             binding.apply {
-                // todo: unblur bg
+//                ivImage.setBlur(0)
 
                 lockView.hide()
                 tvNew.show()

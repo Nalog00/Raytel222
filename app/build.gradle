@@ -106,7 +106,7 @@ dependencies {
     /**
      * Glide
      * */
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
 
     /**
      * PinEntryEditText
@@ -117,9 +117,9 @@ dependencies {
         exclude group: 'androidx.appcompat', module: 'appcompat'
     }
 
-    // ImagePicker
-    implementation 'com.github.dhaval2404:imagepicker:2.1'
-
     // MediaPicker
     implementation 'com.robertlevonyan.components:Picker:2.1.6'
+
+    // BlurImageView
+    implementation 'com.github.jgabrielfreitas:BlurImageView:1.0.1'
 }
