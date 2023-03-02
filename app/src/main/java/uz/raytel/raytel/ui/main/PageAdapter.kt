@@ -46,6 +46,7 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
         fun bind(model: Product) {
             binding.apply {
                 onlineCount.invoke(tvOnline)
+                thisItem.invoke(model)
 
                 ivImage.setImageWithGlide(ivImage.context, model.image)
                 ivLogo.setImageWithGlide(ivLogo.context, model.store.image)
