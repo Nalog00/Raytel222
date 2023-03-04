@@ -52,6 +52,8 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
                 ivLogo.setImageWithGlide(ivLogo.context, model.store.image)
 
                 tvShopName.text = model.store.name
+                tvShopName.isSelected = true
+                tvOnline.isSelected = true
 
                 ivLogo.click {
                     storeClick.invoke(model.store.id)
@@ -109,6 +111,7 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
                 tvNew.show()
                 ivLogo.show()
                 tvShopName.show()
+                btnScreenshot.show()
             }
         }
     }

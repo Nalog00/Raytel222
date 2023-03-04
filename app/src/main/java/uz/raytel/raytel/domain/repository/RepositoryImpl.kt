@@ -1,5 +1,7 @@
 package uz.raytel.raytel.domain.repository
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -10,6 +12,7 @@ import uz.raytel.raytel.data.remote.ResultData
 import uz.raytel.raytel.data.remote.auth.SignInDeviceId
 import uz.raytel.raytel.data.remote.auth.SignInPhone
 import uz.raytel.raytel.data.remote.auth.SignUpPhone
+import uz.raytel.raytel.data.remote.product.RandomProductError
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -98,7 +101,11 @@ class RepositoryImpl @Inject constructor(private val apiService: ApiService) : R
         if (response.isSuccessful) {
             emit(ResultData.Success(response.body()!!))
         } else {
-            emit(ResultData.Message(response.message()))
+            val gson = Gson()
+            val type = object : TypeToken<RandomProductError>() {}.type
+            val errorResponse: RandomProductError? =
+                gson.fromJson(response.errorBody()!!.charStream(), type)
+            emit(ResultData.Message(errorResponse?.error?.message ?: "Unknown error"))
         }
     }.catch {
         emit(ResultData.Error(it))

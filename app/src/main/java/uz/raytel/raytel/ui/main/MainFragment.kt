@@ -1,8 +1,6 @@
 package uz.raytel.raytel.ui.main
 
 import android.app.DownloadManager
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
@@ -133,7 +131,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
                     .setMimeType("image/jpeg")
                     .setAllowedOverRoaming(true)
-                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
                     .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
 
                 manager.enqueue(request)
