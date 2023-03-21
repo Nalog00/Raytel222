@@ -22,7 +22,7 @@ class LocalStorage @Inject constructor(
             App.INSTANCE.getSharedPreferences("LocalStorage", Context.MODE_PRIVATE)
     }
 
-    var firstRun by BooleanPreference(pref, true)
+    var firstRun by BooleanPreference(pref, defValue = true)
 
     var token by StringPreference(pref)
 
@@ -31,7 +31,9 @@ class LocalStorage @Inject constructor(
         Secure.getString(context.contentResolver, Secure.ANDROID_ID)
     )
 
-    var signedIn by BooleanPreference(pref, false)
+    var signedIn by BooleanPreference(pref, defValue = false)
 
-    var selectedStoreId by IntPreference(pref, 1)
+    var selectedStoreId by IntPreference(pref, defValue = 1)
+
+    var lockScreenMessage by StringPreference(pref)
 }

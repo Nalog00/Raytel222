@@ -3,6 +3,7 @@ package uz.raytel.raytel.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,9 +21,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModelImpl @Inject constructor(
     private val repository: Repository
-): MainViewModel, ViewModel() {
+) : MainViewModel, ViewModel() {
     override val randomProductsFlow = MutableSharedFlow<GenericResponse<List<Product>>>()
     override val productsFlow = MutableSharedFlow<PagingResponse<Product>>()
+    override val productViewedFlow = MutableSharedFlow<Any>()
     override val loadingFlow = MutableSharedFlow<Boolean>()
     override val messageFlow = MutableSharedFlow<String>()
     override val errorFlow = MutableSharedFlow<Throwable>()
@@ -58,6 +60,28 @@ class MainViewModelImpl @Inject constructor(
                 is ResultData.Success -> {
                     loadingFlow.emit(false)
                     productsFlow.emit(it.data)
+                }
+                is ResultData.Message -> {
+                    loadingFlow.emit(false)
+                    messageFlow.emit(it.message)
+                }
+                is ResultData.Error -> {
+                    loadingFlow.emit(false)
+                    errorFlow.emit(it.error)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    override suspend fun productViewed(productId: Int) {
+        repository.productViewed(productId).onEach {
+            when (it) {
+                is ResultData.Loading -> {
+                    loadingFlow.emit(true)
+                }
+                is ResultData.Success -> {
+                    loadingFlow.emit(false)
+                    productViewedFlow.emit(it.data)
                 }
                 is ResultData.Message -> {
                     loadingFlow.emit(false)

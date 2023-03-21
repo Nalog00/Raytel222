@@ -35,4 +35,6 @@ interface Repository {
     ): Flow<ResultData<PagingResponse<Product>>>
 
     suspend fun getDetails(): Flow<ResultData<GenericResponse<ConfirmData>>>
+
+    suspend fun productViewed(productId: Int): Flow<ResultData<Any>>
 }

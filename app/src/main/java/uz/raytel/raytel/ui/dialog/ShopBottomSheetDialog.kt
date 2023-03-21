@@ -25,6 +25,7 @@ import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.store.Store
 import uz.raytel.raytel.databinding.BottomSheetShopBinding
 import uz.raytel.raytel.utils.bottomShopListCloseFlow
+import uz.raytel.raytel.utils.shopSelectedFlow
 import uz.raytel.raytel.utils.showSnackBar
 import javax.inject.Inject
 
@@ -103,6 +104,7 @@ class ShopBottomSheetDialog : BottomSheetDialogFragment() {
                 localStorage.selectedStoreId = it.id
                 lifecycleScope.launchWhenCreated {
                     bottomShopListCloseFlow.emit(it.id)
+                    shopSelectedFlow.emit(true)
                 }
                 dismiss()
             }

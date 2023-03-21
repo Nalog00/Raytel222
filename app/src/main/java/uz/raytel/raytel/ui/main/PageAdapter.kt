@@ -54,6 +54,7 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
                 tvShopName.text = model.store.name
                 tvShopName.isSelected = true
                 tvOnline.isSelected = true
+                tvLockMessage.text = localStorage.lockScreenMessage
 
                 ivLogo.click {
                     storeClick.invoke(model.store.id)

@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,9 +29,12 @@ import uz.raytel.raytel.data.remote.auth.SignInDeviceId
 import uz.raytel.raytel.data.remote.product.Product
 import uz.raytel.raytel.data.remote.realtime.OnlineCount
 import uz.raytel.raytel.databinding.FragmentMainBinding
+import uz.raytel.raytel.ui.confirm.ConfirmViewModel
+import uz.raytel.raytel.ui.confirm.ConfirmViewModelImpl
 import uz.raytel.raytel.ui.login.LoginViewModel
 import uz.raytel.raytel.ui.login.LoginViewModelImpl
 import uz.raytel.raytel.utils.bottomShopListCloseFlow
+import uz.raytel.raytel.utils.shopSelectedFlow
 import uz.raytel.raytel.utils.showSnackBar
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,12 +47,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding(FragmentMainBinding::bind)
     private val viewModel: MainViewModel by viewModels<MainViewModelImpl>()
     private val loginViewModel: LoginViewModel by viewModels<LoginViewModelImpl>()
+    private val confirmViewModel: ConfirmViewModel by viewModels<ConfirmViewModelImpl>()
     private lateinit var navController: NavController
     private var _adapter: PageAdapter? = null
     private val adapter: PageAdapter get() = _adapter!!
     private var page = 1
     private var lastPage = 0
     private var products = mutableListOf<Product>()
+    private var randomProducts = mutableListOf<Product>()
+    private var lastViewedProduct = -1
+    private var shopSelected = false
     private val sdf = SimpleDateFormat("yyyyMMdd_hhmmss", Locale.ROOT)
 
     @Inject
@@ -61,11 +69,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
 
         lifecycleScope.launchWhenCreated {
-            if (localStorage.signedIn) {
-                viewModel.getProducts(page, localStorage.selectedStoreId, 50)
-            } else {
+            if (localStorage.signedIn && randomProducts.isEmpty()) {
+                viewModel.getRandomProducts()
+            } else if (randomProducts.isEmpty()) {
                 loginViewModel.signInDeviceId(SignInDeviceId(localStorage.deviceId))
+            } else {
+                adapter.models = randomProducts
             }
+            confirmViewModel.getDetails()
         }
 
         initListener()
@@ -85,6 +96,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         binding.apply {
             viewPager.adapter = adapter
+
+            viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (!shopSelected) {
+                        lastViewedProduct = viewPager.currentItem
+                    }
+                }
+            })
 
             adapter.authNavigation {
                 val action = when (it) {
@@ -119,6 +139,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                             viewModel.getProducts(++page, localStorage.selectedStoreId, 50)
                         }
                     }
+
+                    viewModel.productViewed(it.id)
                 }
             }
 
@@ -170,7 +192,24 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 viewModel.getRandomProducts()
             }.launchIn(lifecycleScope)
 
+            confirmViewModel.loadingFlow.onEach {
+                progressBar.isVisible = it
+            }.launchIn(lifecycleScope)
+
+            confirmViewModel.messageFlow.onEach {
+                showSnackBar(progressBar, it)
+            }.launchIn(lifecycleScope)
+
+            confirmViewModel.errorFlow.onEach {
+                it.localizedMessage?.let { message -> showSnackBar(progressBar, message) }
+            }.launchIn(lifecycleScope)
+
+            confirmViewModel.confirmDetailsFlow.onEach {
+                localStorage.lockScreenMessage = it.data.blockText
+            }.launchIn(lifecycleScope)
+
             viewModel.randomProductsFlow.onEach {
+                randomProducts = it.data.toMutableList()
                 adapter.models = it.data.toMutableList()
             }.launchIn(lifecycleScope)
 
@@ -181,6 +220,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     products.clear()
                     products = it.data.toMutableList()
                     adapter.models = it.data.toMutableList()
+                    viewPager.currentItem = 0
                 } else {
                     products.addAll(it.data)
                     adapter.addItems(it.data)
@@ -190,6 +230,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             bottomShopListCloseFlow.onEach {
                 page = 1
                 viewModel.getProducts(page, localStorage.selectedStoreId, 50)
+            }.launchIn(lifecycleScope)
+
+            shopSelectedFlow.onEach {
+                shopSelected = it
+                if (!shopSelected && randomProducts.isNotEmpty()) {
+                    adapter.models = randomProducts
+                    viewPager.currentItem = lastViewedProduct
+                }
             }.launchIn(lifecycleScope)
         }
     }
