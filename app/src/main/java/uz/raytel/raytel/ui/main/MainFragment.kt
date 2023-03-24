@@ -29,6 +29,7 @@ import uz.raytel.raytel.data.remote.auth.SignInDeviceId
 import uz.raytel.raytel.data.remote.product.Product
 import uz.raytel.raytel.data.remote.realtime.OnlineCount
 import uz.raytel.raytel.databinding.FragmentMainBinding
+import uz.raytel.raytel.ui.MainActivity
 import uz.raytel.raytel.ui.confirm.ConfirmViewModel
 import uz.raytel.raytel.ui.confirm.ConfirmViewModelImpl
 import uz.raytel.raytel.ui.login.LoginViewModel
@@ -148,6 +149,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 val manager = requireActivity().getSystemService(DownloadManager::class.java)
                 val uri = product.markedImage.toUri()
                 val fileName = "${sdf.format(System.currentTimeMillis())}.jpg"
+                (requireActivity() as MainActivity).fileName = fileName
                 val request = DownloadManager.Request(uri)
                     .setTitle(fileName)
                     .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
