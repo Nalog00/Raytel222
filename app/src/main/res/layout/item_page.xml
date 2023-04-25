@@ -32,8 +32,8 @@
 
         <TextView
             android:id="@+id/tv_new"
-            android:layout_width="116dp"
-            android:layout_height="36dp"
+            android:layout_width="108dp"
+            android:layout_height="32dp"
             android:layout_margin="16dp"
             android:background="@drawable/shape_new"
             android:gravity="center"
@@ -67,7 +67,7 @@
 
         <TextView
             android:id="@+id/tv_shop_name"
-            android:layout_width="116dp"
+            android:layout_width="108dp"
             android:layout_height="0dp"
             android:background="@drawable/shape_border"
             android:backgroundTint="@color/main_bg_color"
@@ -86,8 +86,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_logo"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_margin="16dp"
             android:background="@color/white"
             android:scaleType="centerCrop"
@@ -100,9 +100,10 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_screenshot"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="116dp"
+            android:layout_width="108dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:paddingVertical="8dp"
             android:backgroundTint="@color/black"
             android:ellipsize="end"
             android:singleLine="true"
@@ -132,6 +133,7 @@
             android:layout_margin="16dp"
             android:padding="8dp"
             android:src="@drawable/ic_close"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
@@ -196,8 +198,8 @@
 
     <LinearLayout
         android:id="@+id/container_online"
-        android:layout_width="116dp"
-        android:layout_height="36dp"
+        android:layout_width="108dp"
+        android:layout_height="32dp"
         android:layout_margin="16dp"
         android:background="@drawable/shape_border"
         android:gravity="center_vertical"

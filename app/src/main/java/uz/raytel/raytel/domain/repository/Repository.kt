@@ -26,6 +26,8 @@ interface Repository {
 
     suspend fun getRandomProducts(): Flow<ResultData<GenericResponse<List<Product>>>>
 
+    suspend fun getRandomProductsWithoutLimit(): Flow<ResultData<GenericResponse<List<Product>>>>
+
     suspend fun getStores(storeId: Int, page: Int, limit: Int = 30): Flow<ResultData<PagingResponse<Store>>>
 
     suspend fun getProducts(

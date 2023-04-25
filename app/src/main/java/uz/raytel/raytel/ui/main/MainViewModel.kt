@@ -12,6 +12,7 @@ import uz.raytel.raytel.data.remote.product.Product
 interface MainViewModel {
 
     val randomProductsFlow: Flow<GenericResponse<List<Product>>>
+    val randomProductsWithoutLimitFlow: Flow<GenericResponse<List<Product>>>
     val productsFlow: Flow<PagingResponse<Product>>
     val productViewedFlow: Flow<Any>
     val loadingFlow: Flow<Boolean>
@@ -19,6 +20,7 @@ interface MainViewModel {
     val errorFlow: Flow<Throwable>
 
     suspend fun getRandomProducts()
+    suspend fun getRandomProductsWithoutLimit()
     suspend fun getProducts(page: Int, storeId: Int, limit: Int)
     suspend fun productViewed(productId: Int)
 }

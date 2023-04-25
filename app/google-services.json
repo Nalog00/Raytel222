@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1038267377183",
+    "firebase_url": "https://raytel-8a22d-default-rtdb.firebaseio.com",
     "project_id": "raytel-8a22d",
     "storage_bucket": "raytel-8a22d.appspot.com"
   },
@@ -14,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "1038267377183-so6v6nuhei2a3n6vgs28gu8ub38dim5j.apps.googleusercontent.com",
+          "client_id": "1038267377183-cj47a2ij1r3e2ft168qp3hvu1oabb6e7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "uz.raytel.raytel",

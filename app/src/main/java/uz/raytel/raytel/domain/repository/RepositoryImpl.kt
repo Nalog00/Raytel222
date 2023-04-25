@@ -1,15 +1,18 @@
 package uz.raytel.raytel.domain.repository
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.MultipartBody
 import uz.raytel.raytel.data.remote.ApiService
+import uz.raytel.raytel.data.remote.GenericResponse
 import uz.raytel.raytel.data.remote.ResultData
 import uz.raytel.raytel.data.remote.auth.SignInDeviceId
 import uz.raytel.raytel.data.remote.auth.SignInPhone
 import uz.raytel.raytel.data.remote.auth.SignUpPhone
+import uz.raytel.raytel.data.remote.product.Product
 import uz.raytel.raytel.utils.getErrorMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -95,6 +98,20 @@ class RepositoryImpl @Inject constructor(private val apiService: ApiService) : R
         emit(ResultData.Loading)
 
         val response = apiService.getRandomProducts()
+
+        if (response.isSuccessful) {
+            emit(ResultData.Success(response.body()!!))
+        } else {
+            emit(ResultData.Message(getErrorMessage(response.errorBody()!!.charStream())))
+        }
+    }.catch {
+        emit(ResultData.Error(it))
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getRandomProductsWithoutLimit() = flow {
+        emit(ResultData.Loading)
+
+        val response = apiService.getRandomProductsWithoutLimit()
 
         if (response.isSuccessful) {
             emit(ResultData.Success(response.body()!!))

@@ -44,6 +44,9 @@ interface ApiService {
     @GET("api/products/random")
     suspend fun getRandomProducts(): Response<GenericResponse<List<Product>>>
 
+    @GET("api/products/random/without-limit")
+    suspend fun getRandomProductsWithoutLimit(): Response<GenericResponse<List<Product>>>
+
     @GET("api/stores")
     suspend fun getStores(
         @Query("store_id") storeId: Int,

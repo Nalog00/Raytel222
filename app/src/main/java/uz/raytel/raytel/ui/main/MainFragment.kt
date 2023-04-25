@@ -67,15 +67,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
 
-
-
         lifecycleScope.launchWhenCreated {
-            if (localStorage.signedIn && randomProducts.isEmpty()) {
+            if (localStorage.signedIn && products.isEmpty()) {
                 viewModel.getRandomProducts()
-            } else if (randomProducts.isEmpty()) {
+            } else if (products.isEmpty()) {
                 loginViewModel.signInDeviceId(SignInDeviceId(localStorage.deviceId))
             } else {
-                adapter.models = randomProducts
+                adapter.models = products
             }
             confirmViewModel.getDetails()
         }
@@ -136,8 +134,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 lifecycleScope.launch {
                     if (products.size > 1) {
                         val beforeLastProduct = products[products.lastIndex - 1]
-                        if (beforeLastProduct == it && page < lastPage) {
-                            viewModel.getProducts(++page, localStorage.selectedStoreId, 50)
+                        if (beforeLastProduct == it) {
+                            viewModel.getRandomProductsWithoutLimit()
                         }
                     }
 
@@ -211,22 +209,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }.launchIn(lifecycleScope)
 
             viewModel.randomProductsFlow.onEach {
-                randomProducts = it.data.toMutableList()
+                products.clear()
+                products.addAll(it.data)
                 adapter.models = it.data.toMutableList()
             }.launchIn(lifecycleScope)
 
-            viewModel.productsFlow.onEach {
-                lastPage = it.pagination.totalPages
-                if (it.pagination.currentPage == 1) {
-                    adapter.models.clear()
-                    products.clear()
-                    products = it.data.toMutableList()
-                    adapter.models = it.data.toMutableList()
-                    viewPager.currentItem = 0
-                } else {
-                    products.addAll(it.data)
-                    adapter.addItems(it.data)
-                }
+            viewModel.randomProductsWithoutLimitFlow.onEach {
+                products.addAll(it.data)
+                adapter.addItems(it.data)
             }.launchIn(lifecycleScope)
 
             bottomShopListCloseFlow.onEach {
@@ -236,8 +226,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
             shopSelectedFlow.onEach {
                 shopSelected = it
-                if (!shopSelected && randomProducts.isNotEmpty()) {
-                    adapter.models = randomProducts
+                if (!shopSelected && products.isNotEmpty()) {
+                    adapter.models = products
                     viewPager.currentItem = lastViewedProduct
                 }
             }.launchIn(lifecycleScope)

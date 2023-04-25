@@ -76,7 +76,7 @@ class PageAdapter(context: Context) : Adapter<PageAdapter.PageViewHolder>() {
                 }
 
                 val position = absoluteAdapterPosition + 1
-                if (position >= 15 && position % 3 == 0 && !localStorage.signedIn) {
+                if (position >= 16 && position % 4 == 0 && !localStorage.signedIn) {
                     showLockScreen()
                 } else {
                     hideLockScreen()
