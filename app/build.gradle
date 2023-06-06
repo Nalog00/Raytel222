@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "uz.raytel.raytel"
-        minSdk 23
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -50,6 +50,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.firebase:firebase-database-ktx:20.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'
+    implementation 'com.google.android.gms:play-services-base:18.2.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -82,7 +84,6 @@ dependencies {
      * */
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
     /**
      * dagger hilt
@@ -108,20 +109,18 @@ dependencies {
      * */
     implementation 'com.github.bumptech.glide:glide:4.14.2'
 
-    /**
-     * PinEntryEditText
-     */
-    implementation ('com.alimuzaffar.lib:pinentryedittext:2.0.6') {
-        // Exclude is only needed if you already have
-        // androidx.appcompat as a dependency in your app.
-        exclude group: 'androidx.appcompat', module: 'appcompat'
-    }
-
     // MediaPicker
     implementation 'com.robertlevonyan.components:Picker:2.1.6'
-
-    // BlurImageView
-    implementation 'com.github.jgabrielfreitas:BlurImageView:1.0.1'
-
     implementation 'com.google.android.play:integrity:1.1.0'
+
+
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
+
+    def paging_version = "3.1.1" //current version at the time
+
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    implementation "androidx.paging:paging-common-ktx:$paging_version"
+
+
 }

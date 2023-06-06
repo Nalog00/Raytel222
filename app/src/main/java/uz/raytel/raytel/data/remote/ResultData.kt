@@ -6,3 +6,7 @@ sealed class ResultData<out T> {
     data class Error<T>(val error: Throwable) : ResultData<T>()
     object Loading: ResultData<Nothing>()
 }
+
+
+class Main{
+}

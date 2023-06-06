@@ -4,29 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg_color"
     tools:context=".ui.confirm.PaymentConfirmFragment">
+
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_logo"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="36dp"
         android:src="@drawable/logo_raytel_png"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/text_confirm_message"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -34,159 +23,168 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/text_slogan"
+        android:fontFamily="@font/rubik_regular"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_description" />
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/iv_logo"
+        tools:text="@string/text_confirm_message" />
+
 
     <TextView
-        android:id="@+id/tv_price"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_description"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="24dp"
         android:layout_marginTop="16dp"
-        android:text="@string/text_cost"
-        android:textAlignment="center"
-        android:textColor="@color/red"
-        android:textSize="32sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/rubik_regular"
+        android:text="@string/text_pay_money"
+        android:textColor="@color/dark_blue_color"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
-    <TextView
-        android:id="@+id/tv_bank_details"
-        android:layout_width="wrap_content"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/l_card_info"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:drawablePadding="16dp"
-        android:text="@string/text_bank_details"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:drawableEndCompat="@drawable/ic_copy"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_price" />
+        android:background="@drawable/bg_rect_12"
+        android:backgroundTint="#99FAFD"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@id/tv_description"
+        app:layout_constraintStart_toStartOf="@id/tv_description"
+        app:layout_constraintTop_toBottomOf="@id/tv_description">
+
+
+        <TextView
+            android:id="@+id/tv_card_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="16dp"
+            android:layout_weight="0.9"
+            android:fontFamily="@font/rubik_medium"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@id/ic_copy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="8600 9860 6004 1313" />
+
+        <ImageView
+            android:id="@+id/ic_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:layout_weight="0.1"
+            android:padding="8dp"
+            android:src="@drawable/ic_copy_with_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/rubik_regular"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_card_number"
+            app:layout_constraintTop_toBottomOf="@id/tv_card_number"
+            tools:text="Utemuradov Baxtiyar " />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#D9D9D9"
+        app:layout_constraintEnd_toEndOf="@id/l_card_info"
+        app:layout_constraintStart_toStartOf="@id/l_card_info"
+        app:layout_constraintTop_toBottomOf="@id/l_card_info" />
+
 
     <TextView
-        android:id="@+id/tv_end_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_check_confirm"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/text_upload_hint"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_bank_details" />
+        android:layout_marginTop="24dp"
+        android:text="To'lemdi tastiqlaw ushin check fotosin juklen'"
+        app:layout_constraintEnd_toEndOf="@id/v_line"
+        app:layout_constraintStart_toStartOf="@id/v_line"
+        app:layout_constraintTop_toBottomOf="@id/v_line" />
 
-    <com.google.android.material.button.MaterialButton
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_rect_8"
         android:backgroundTint="@color/main_color"
+        android:fontFamily="@font/rubik_regular"
+        android:paddingHorizontal="32dp"
         android:text="@string/text_choose_photo"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_end_text" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_check_confirm"
+        app:layout_constraintTop_toBottomOf="@id/tv_check_confirm" />
 
     <TextView
         android:id="@+id/tv_file_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/rubik_regular"
         android:text="@string/text_photo_not_selected"
         android:textColor="@color/red"
-        app:layout_constraintEnd_toEndOf="@id/btn_upload"
-        app:layout_constraintStart_toStartOf="@id/btn_upload"
-        app:layout_constraintTop_toBottomOf="@id/btn_upload" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/btn_upload"
+        app:layout_constraintStart_toStartOf="@id/tv_check_confirm"
+        app:layout_constraintTop_toTopOf="@id/btn_upload" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_username"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="48dp"
-        android:hint="@string/text_input_username"
-        app:boxBackgroundColor="@color/white"
-        app:boxStrokeColor="@color/main_color"
-        app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@id/til_password"
-        app:layout_constraintTop_toBottomOf="@id/tv_file_status"
-        app:layout_constraintVertical_chainStyle="packed">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLength="30"
-            android:maxLines="1"
-            android:singleLine="true" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_password"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="48dp"
-        android:layout_marginTop="4dp"
-        android:hint="@string/text_input_password"
-        app:boxBackgroundColor="@color/white"
-        app:boxStrokeColor="@color/main_color"
-        app:endIconMode="password_toggle"
-        app:layout_constraintBottom_toTopOf="@id/btn_finish"
-        app:layout_constraintTop_toBottomOf="@id/til_username">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:maxLength="30"
-            android:maxLines="1"
-            android:singleLine="true" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_finish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_rect_8"
         android:backgroundTint="@color/main_color"
-        android:paddingHorizontal="36dp"
         android:text="@string/text_finish"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/tv_phone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_password" />
-
-    <TextView
-        android:id="@+id/tv_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/raytel_uz_phone_full"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/btn_upload"
-        app:layout_constraintStart_toStartOf="@id/btn_upload" />
+        app:layout_constraintEnd_toEndOf="@id/l_card_info"
+        app:layout_constraintStart_toStartOf="@id/l_card_info" />
 
-    <ProgressBar
+
+    <FrameLayout
         android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99FFFFFF"
+        android:clickable="true"
+        android:translationZ="10dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

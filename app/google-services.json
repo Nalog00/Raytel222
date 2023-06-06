@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1038267377183-cj47a2ij1r3e2ft168qp3hvu1oabb6e7.apps.googleusercontent.com",
+          "client_id": "1038267377183-3haomdc734rsajsnpqb3b2qp951u1usv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "uz.raytel.raytel",
-            "certificate_hash": "894f2809b563160b42e9ba895f4cdce6f153251e"
+            "certificate_hash": "8d4af4788c54e4dd2ac23bb1f46c1452ba0ca796"
           }
         },
         {

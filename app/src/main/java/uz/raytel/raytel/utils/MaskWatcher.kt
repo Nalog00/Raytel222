@@ -1,4 +1,4 @@
-package uz.texnopos.elektrolife.core
+package uz.raytel.raytel.utils
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,28 +12,33 @@ class MaskWatcher(private val mask: String) : TextWatcher {
 
     override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {}
     override fun afterTextChanged(editable: Editable) {
-        if (isRunning || isDeleting) {
+        try {
+            if (isRunning || isDeleting) {
+                return
+            }
+            isRunning = true
+            val editableLength = editable.length
+            if (editableLength < mask.length) {
+                if (mask[editableLength] != '#') {
+                    editable.append(mask[editableLength])
+                } else if (mask[editableLength - 1] != '#') {
+                    editable.insert(editableLength - 1, mask, editableLength - 1, editableLength)
+                }
+            }
+            isRunning = false
+        }catch (e: StringIndexOutOfBoundsException){
             return
         }
-        isRunning = true
-        val editableLength = editable.length
-        if (editableLength < mask.length) {
-            if (mask[editableLength] != '#') {
-                editable.append(mask[editableLength])
-            } else if (mask[editableLength - 1] != '#') {
-                editable.insert(editableLength - 1, mask, editableLength - 1, editableLength)
-            }
-        }
-        isRunning = false
     }
-
     companion object {
         fun phoneNumber(): MaskWatcher {
             return MaskWatcher("## ###-##-##")
         }
+
         fun phoneNumberBySpaces(): MaskWatcher {
             return MaskWatcher("(##) ### ## ##")
         }
+
         fun taxIdentificationNumber(): MaskWatcher {
             return MaskWatcher("### ### ###")
         }

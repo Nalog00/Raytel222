@@ -1,26 +1,21 @@
 package uz.raytel.raytel.ui.main
 
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import uz.raytel.raytel.data.remote.GenericResponse
-import uz.raytel.raytel.data.remote.auth.AuthResponse
-import uz.raytel.raytel.data.remote.auth.SignInDeviceId
-import uz.raytel.raytel.data.remote.auth.SignInPhone
-import uz.raytel.raytel.data.remote.auth.SignUpPhone
 import uz.raytel.raytel.data.remote.paging.PagingResponse
 import uz.raytel.raytel.data.remote.product.Product
 
 interface MainViewModel {
 
-    val randomProductsFlow: Flow<GenericResponse<List<Product>>>
-    val randomProductsWithoutLimitFlow: Flow<GenericResponse<List<Product>>>
+
+    val getRandomProductsFlow: StateFlow<Int>
+    val randomProductsFlow: Flow<PagingData<Product>>
     val productsFlow: Flow<PagingResponse<Product>>
-    val productViewedFlow: Flow<Any>
     val loadingFlow: Flow<Boolean>
     val messageFlow: Flow<String>
     val errorFlow: Flow<Throwable>
-
-    suspend fun getRandomProducts()
-    suspend fun getRandomProductsWithoutLimit()
-    suspend fun getProducts(page: Int, storeId: Int, limit: Int)
-    suspend fun productViewed(productId: Int)
+     fun getRandomProducts()
+    suspend fun getProducts(storeId: Int)
 }

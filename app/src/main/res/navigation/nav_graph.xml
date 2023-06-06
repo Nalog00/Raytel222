@@ -9,24 +9,24 @@
         android:id="@+id/mainFragment"
         android:name="uz.raytel.raytel.ui.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_shopBottomSheetDialog"
             app:destination="@id/shopBottomSheetDialog" />
         <action
             android:id="@+id/action_mainFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/paymentConfirmFragment"
         android:name="uz.raytel.raytel.ui.confirm.PaymentConfirmFragment"
         android:label="fragment_confirm_payment"
-        tools:layout="@layout/fragment_confirm_payment" >
+        tools:layout="@layout/fragment_confirm_payment">
         <argument
             android:name="phone"
+            app:argType="string" />
+        <argument
+            android:name="username"
             app:argType="string" />
     </fragment>
     <dialog
@@ -38,25 +38,39 @@
         android:id="@+id/registerFragment"
         android:name="uz.raytel.raytel.ui.register.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_paymentConfirmFragment"
             app:destination="@id/paymentConfirmFragment" />
         <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/registerFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_registerFragment_to_confirmFragment"
+            app:destination="@id/confirmFragment" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="uz.raytel.raytel.ui.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:id="@+id/confirmFragment"
+        android:name="uz.raytel.raytel.ui.register.ConfirmFragment"
+        android:label="ConfirmFragment"
+        tools:layout="@layout/fragment_confirm">
+        <argument
+            android:name="phone"
+            app:argType="string" />
         <action
-            android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_confirmFragment_to_paymentConfirmFragment"
+            app:destination="@id/paymentConfirmFragment" />
+        <action
+            android:id="@+id/action_confirmFragment_to_registerNameFragment"
+            app:destination="@id/registerNameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerNameFragment"
+        android:name="uz.raytel.raytel.ui.registerName.RegisterNameFragment"
+        android:label="RegisterNameFragment"
+        tools:layout="@layout/fragment_register_name">
+        <action
+            android:id="@+id/action_registerNameFragment_to_paymentConfirmFragment"
+            app:destination="@id/paymentConfirmFragment" />
+        <argument
+            android:name="phone"
+            app:argType="string" />
     </fragment>
 </navigation>

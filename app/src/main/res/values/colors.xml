@@ -11,4 +11,7 @@
     <color name="main_color">#FFFF08</color>
     <color name="red">#f44336</color>
     <color name="color_green">#36BA3B</color>
+    <color name="box_background_color">#FFFACD</color>
+    <color name="dark_blue_color">#80000459</color>
+    <color name="purple_color">#908DFF</color>
 </resources>

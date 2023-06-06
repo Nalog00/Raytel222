@@ -19,6 +19,7 @@ class ConfirmViewModelImpl @Inject constructor(
     private val repository: Repository
 ): ConfirmViewModel, ViewModel() {
 
+
     override val confirmDetailsFlow = MutableSharedFlow<GenericResponse<ConfirmData>>()
     override val uploadImageFlow = MutableSharedFlow<GenericResponse<List<UploadResponse>>>()
     override val loadingFlow = MutableSharedFlow<Boolean>()

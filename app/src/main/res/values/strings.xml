@@ -12,7 +12,7 @@
     <string name="text_lock_warning">Bloktaǵı barlıq súwretti kóriw ushın dizimnen ótiń</string>
     <string name="text_resend">Qaytaldan jiberiw</string>
     <string name="text_new">New</string>
-    <string name="text_choose_photo">Súwret saylaw</string>
+    <string name="text_choose_photo">Chek saylaw</string>
     <string name="raytel_uz_phone_full">+998 93 366 33 99</string>
     <string name="text_finish">Juwmaqlaw</string>
     <string name="text_input_password">Parol kiritiń</string>
@@ -23,7 +23,8 @@
     <string name="text_bank_details">%s\n%s</string>
     <string name="text_cost">%s swm</string>
     <string name="text_slogan">Siz de zamannan artta qalmań!</string>
-    <string name="text_confirm_message">Bloktaǵı barlıq súwretlerdi kóriw ushın pullı dizimnen ótiwińiz kerek. Sol arqalı bizdegi barlıq magazinlerdiń ónimlerin kóriwińiz múmkin.</string>
+    <string name="text_pay_money">Tomendegi kórsetilgen kartaǵa <font color="#9747FF">%s</font> tólew kerek</string>
+    <string name="text_confirm_message">Tólem qiliw.</string>
     <string name="text_sign_up">Dizimnen ótiw</string>
     <string name="text_sign_in">Akkauntqa kiriw</string>
     <string name="error_invalid_phone_number">Nadurıs telefon nomer kiritildi!</string>
@@ -32,4 +33,13 @@
     <string name="error_invalid_confirm_code">Tekseriw kodı nadurıs kiritildi!</string>
     <string name="error_verification_code_not_sent_yet">Ele tekseriw kodı jiberilmedi!</string>
     <string name="error_image_not_selected">Súwret saylanbadı!</string>
+    <string name="we_will_send_sms_code_to_phone">Sms-kod joqaridag\'i nomerge jiberiledi</string>
+    <string name="get_code_again_after">qaytadan kod aliw</string>
+    <string name="get_code_again">Qaytadan kod aliw</string>
+    <string name="after_30_seconds">%s sekunndan</string>
+    <string name="no_account">Akkauntińiz joqpa?</string>
+    <string name="enter_code_from_sms">Smstag\'i koddi kiritiń</string>
+    <string name="trial_time_finished">Sinaw muddeti tawsildi!</string>
+    <string name="pay_to_use_app">Programmadan paydalaniwdi dawam\n ettiriw ushin tolem amelge asiriw</string>
+    <string name="exit">Shig\'iw</string>
 </resources>

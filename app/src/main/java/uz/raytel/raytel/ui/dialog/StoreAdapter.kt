@@ -3,6 +3,8 @@ package uz.raytel.raytel.ui.dialog
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import uz.raytel.raytel.R
@@ -11,29 +13,22 @@ import uz.raytel.raytel.databinding.ItemShopBinding
 import uz.raytel.raytel.utils.click
 import uz.raytel.raytel.utils.setImageWithGlide
 
-class StoreAdapter : Adapter<StoreAdapter.StoreViewHolder>() {
-
-    var models = mutableListOf<Store>()
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class StoreAdapter : PagingDataAdapter<Store, StoreAdapter.StoreViewHolder>(MyDiffUtil) {
 
     inner class StoreViewHolder(private val binding: ItemShopBinding) : ViewHolder(binding.root) {
-        fun bind(model: Store) {
-            binding.apply {
-                ivLogo.setImageWithGlide(ivLogo.context, model.image)
-                tvShopName.text = model.name
+        fun bind(model: Store?) {
+            model?.let {
+                binding.apply {
+                    ivLogo.setImageWithGlide(ivLogo.context, model.image)
+                    tvShopName.text = model.name
 
-                root.click {
-                    onItemClick.invoke(model)
+                    root.click {
+                        onItemClick.invoke(model)
+                    }
                 }
             }
         }
     }
-
-    override fun getItemCount() = models.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoreViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_shop, parent, false)
@@ -42,17 +37,22 @@ class StoreAdapter : Adapter<StoreAdapter.StoreViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: StoreViewHolder, position: Int) {
-        holder.bind(models[position])
-    }
-
-    fun addItems(items: List<Store>) {
-        val p = models.size
-        models.addAll(items)
-        notifyItemRangeInserted(p, items.size)
+        holder.bind(getItem(position))
     }
 
     private var onItemClick: (store: Store) -> Unit = {}
     fun setOnItemClickListener(block: (store: Store) -> Unit) {
         onItemClick = block
+    }
+
+
+    object MyDiffUtil : DiffUtil.ItemCallback<Store>() {
+        override fun areItemsTheSame(oldItem: Store, newItem: Store): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Store, newItem: Store): Boolean {
+            return oldItem.id == newItem.id && oldItem.name == newItem.name && oldItem.image == newItem.image
+        }
     }
 }

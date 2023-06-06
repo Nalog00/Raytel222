@@ -10,6 +10,7 @@ import android.view.WindowManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
@@ -18,13 +19,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import uz.raytel.raytel.R
 import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.store.Store
 import uz.raytel.raytel.databinding.BottomSheetShopBinding
-import uz.raytel.raytel.utils.bottomShopListCloseFlow
 import uz.raytel.raytel.utils.shopSelectedFlow
 import uz.raytel.raytel.utils.showSnackBar
 import javax.inject.Inject
@@ -33,11 +35,7 @@ import javax.inject.Inject
 class ShopBottomSheetDialog : BottomSheetDialogFragment() {
     private val binding: BottomSheetShopBinding by viewBinding(BottomSheetShopBinding::bind)
     private val viewModel: ShopViewModel by viewModels<ShopViewModelImpl>()
-    private var page = 1
-    private var lastPage = 0
-    private val storesList = mutableListOf<Store>()
-    private var _adapter: StoreAdapter? = null
-    private val adapter: StoreAdapter get() = _adapter!!
+    private val adapter: StoreAdapter by lazy { StoreAdapter() }
 
     @Inject
     lateinit var localStorage: LocalStorage
@@ -52,8 +50,9 @@ class ShopBottomSheetDialog : BottomSheetDialogFragment() {
         val dialog = BottomSheetDialog(requireContext(), theme)
         dialog.setOnShowListener {
             val bottomSheetDialog = it as BottomSheetDialog
-            val parentLayout = bottomSheetDialog
-                .findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            val parentLayout =
+                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            parentLayout?.setBackgroundResource(R.drawable.bg_rect_top_16)
             parentLayout?.let { layout ->
                 val behaviour = BottomSheetBehavior.from(layout)
                 setupFullHeight(layout)
@@ -77,36 +76,21 @@ class ShopBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     private fun initListeners() {
-        _adapter = StoreAdapter()
-
         binding.apply {
             lifecycleScope.launchWhenCreated {
-                viewModel.getStores(localStorage.selectedStoreId, page, 15)
+                viewModel.getStores(localStorage.selectedStoreId)
             }
 
             val layoutManager = rvShop.layoutManager as GridLayoutManager
             rvShop.adapter = adapter
-            rvShop.addOnScrollListener(object : OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (adapter.models.isNotEmpty() && page < lastPage &&
-                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
-                    ) {
-                        page++
-                        lifecycleScope.launchWhenCreated {
-                            viewModel.getStores(localStorage.selectedStoreId, page, 50)
-                        }
-                    }
-                }
-            })
+
 
             adapter.setOnItemClickListener {
                 localStorage.selectedStoreId = it.id
-                lifecycleScope.launchWhenCreated {
-                    bottomShopListCloseFlow.emit(it.id)
+                lifecycleScope.launch {
                     shopSelectedFlow.emit(true)
+                    dismiss()
                 }
-                dismiss()
             }
         }
     }
@@ -124,19 +108,10 @@ class ShopBottomSheetDialog : BottomSheetDialogFragment() {
             it.localizedMessage?.let { message -> showSnackBar(binding.rvShop, message) }
         }.launchIn(lifecycleScope)
 
-        viewModel.storesFlow.onEach {
-            lastPage = it.pagination.totalPages
-            if (it.pagination.currentPage == 1) {
-                adapter.models.clear()
-                storesList.clear()
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.storesFlow.collectLatest {
+                adapter.submitData(it)
             }
-            storesList.addAll(it.data)
-            adapter.addItems(it.data)
-        }.launchIn(lifecycleScope)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        _adapter = null
+        }
     }
 }

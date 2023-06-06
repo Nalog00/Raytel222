@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -17,113 +18,93 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.textChanges
 import uz.raytel.raytel.R
+import uz.raytel.raytel.data.local.LocalStorage
+import uz.raytel.raytel.data.remote.auth.SendSmsData
 import uz.raytel.raytel.databinding.FragmentRegisterBinding
 import uz.raytel.raytel.utils.*
-import uz.texnopos.elektrolife.core.MaskWatcher
+import uz.raytel.raytel.utils.MaskWatcher
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
     private val binding by viewBinding(FragmentRegisterBinding::bind)
+    private val viewModel: RegisterViewModel by viewModels<RegisterViewModelImpl>()
     private lateinit var navController: NavController
-    private lateinit var auth: FirebaseAuth
-    private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-    private var verificationId = ""
+
+    @Inject
+    lateinit var localStorage: LocalStorage
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
-        auth = Firebase.auth
-        auth.setLanguageCode("uz")
-
         initListeners()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.sendSmsCodeFlow.onEach {
+            binding.progressBar.hide()
+            showSnackBar(
+                binding.btnGetCode, "Kod jiberildi!"
+            )
+            navController.navigate(
+                RegisterFragmentDirections.actionRegisterFragmentToConfirmFragment(
+                    binding.etPhoneNumber.text.toString().filter { it.isDigit() })
+            )
+        }.launchIn(lifecycleScope)
+
+
+        viewModel.messageFlow.onEach {
+            binding.progressBar.hide()
+            binding.btnGetCode.text = getString(R.string.text_resend)
+            binding.btnGetCode.isEnabled = true
+            showSnackBar(binding.btnGetCode, it)
+        }.launchIn(lifecycleScope)
     }
 
     private fun initListeners() {
         binding.apply {
-            etPhone.addTextChangedListener(MaskWatcher.phoneNumber())
-            etPhone.addTextChangedListener {
-                tilPhone.isErrorEnabled = false
-            }
-            etPinCode.addTextChangedListener {
-                val code = it.toString()
-                btnContinue.isEnabled = code.length == 6
-            }
+            etPhoneNumber.addTextChangedListener(MaskWatcher.phoneNumber())
 
-            tvSend.clickWithDebounce(lifecycleScope) {
-                otpSend()
-            }
-
-            btnContinue.clickWithDebounce(lifecycleScope) {
-                val code = etPinCode.text.toString().filter { it.isDigit() }
-                if (verificationId.isEmpty()) {
-                    showSnackBar(
-                        btnContinue,
-                        getString(R.string.error_verification_code_not_sent_yet)
-                    )
-                    return@clickWithDebounce
+            etPhoneNumber.addTextChangedListener {
+                etPhoneNumber.error = null
+                if (it.toString().isNotEmpty()) {
+                    prefixNumber.show()
+                } else {
+                    prefixNumber.hide()
                 }
-                val credential = PhoneAuthProvider.getCredential(verificationId, code)
-                auth.signInWithCredential(credential)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            navController.navigate(
-                                RegisterFragmentDirections.actionRegisterFragmentToPaymentConfirmFragment(
-                                    etPhone.text.toString().filter { it.isDigit() }
-                                )
-                            )
-                        } else {
-                            showSnackBar(
-                                btnContinue,
-                                getString(R.string.error_invalid_confirm_code)
-                            )
-                        }
-                    }
             }
 
-            tvSignIn.clickWithDebounce(lifecycleScope) {
-                navController.navigate(R.id.action_registerFragment_to_loginFragment)
-            }
+            btnGetCode.clicks().debounce(200).onEach {
+                binding.progressBar.show()
+                if (binding.etPhoneNumber.text.toString().isValidPhoneNumber) {
+                    viewModel.sendSmsCode(
+                        SendSmsData(
+                            "998${binding.etPhoneNumber.text.toString().filter { it.isDigit() }}",
+                            localStorage.deviceId
+                        )
+                    )
+                    startSmsListener()
+                } else {
+                    binding.etPhoneNumber.error = getString(R.string.error_invalid_phone_number)
+                    binding.progressBar.hide()
+                }
+                hideKeyboard()
+            }.launchIn(lifecycleScope)
         }
     }
 
-    private fun otpSend() {
-        binding.progressBar.show()
-        binding.tvSend.isEnabled = false
-
-        callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
-
-            override fun onVerificationFailed(e: FirebaseException) {
-                binding.progressBar.hide()
-                binding.tvSend.text = getString(R.string.text_resend)
-                binding.tvSend.isEnabled = true
-                e.localizedMessage?.let { showSnackBar(binding.tvSend, it) }
-            }
-
-            override fun onCodeSent(
-                verificationId: String,
-                token: PhoneAuthProvider.ForceResendingToken
-            ) {
-                binding.progressBar.hide()
-                binding.tvSend.text = getString(R.string.text_resend)
-                binding.tvSend.isEnabled = true
-                showSnackBar(binding.tvSend, "Kod jiberildi!")
-                this@RegisterFragment.verificationId = verificationId
-            }
-        }
-
-        if (binding.etPhone.text.toString().isValidPhoneNumber) {
-            val options = PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber("+998${binding.etPhone.text.toString().filter { it.isDigit() }}")
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(requireActivity())
-                .setCallbacks(callbacks)
-                .build()
-            PhoneAuthProvider.verifyPhoneNumber(options)
-        } else {
-            binding.tilPhone.error = getString(R.string.error_invalid_phone_number)
-        }
+    private fun startSmsListener() {
+        val client = SmsRetriever.getClient(requireContext())
+        client.startSmsRetriever()
     }
 }
+
+

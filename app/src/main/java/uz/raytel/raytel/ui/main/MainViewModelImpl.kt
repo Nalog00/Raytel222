@@ -2,115 +2,56 @@ package uz.raytel.raytel.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
+import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.GenericResponse
 import uz.raytel.raytel.data.remote.ResultData
 import uz.raytel.raytel.data.remote.paging.PagingResponse
+import uz.raytel.raytel.data.remote.paging.ProductsPagingSourse
 import uz.raytel.raytel.data.remote.product.Product
+import uz.raytel.raytel.domain.repository.MainRepository
 import uz.raytel.raytel.domain.repository.Repository
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModelImpl @Inject constructor(
-    private val repository: Repository
+    private val mainRepository: MainRepository
 ) : MainViewModel, ViewModel() {
-    override val randomProductsFlow = MutableSharedFlow<GenericResponse<List<Product>>>()
-    override val randomProductsWithoutLimitFlow =
-        MutableSharedFlow<GenericResponse<List<Product>>>()
+
+
+    private var newPagingSource: PagingSource<*, *>? = null
+
+
+    override val getRandomProductsFlow = MutableStateFlow(-1)
+
+    override val randomProductsFlow =
+        getRandomProductsFlow.map(::newPager).flatMapLatest { pager -> pager.flow }
+            .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+            .cachedIn(viewModelScope)
+
+
+    private fun newPager(id: Int): Pager<Int, Product> {
+        return Pager(PagingConfig(3, enablePlaceholders = false)) {
+            newPagingSource?.invalidate()
+            mainRepository.getProducts(id).also { newPagingSource = it }
+        }
+    }
+
+
     override val productsFlow = MutableSharedFlow<PagingResponse<Product>>()
-    override val productViewedFlow = MutableSharedFlow<Any>()
     override val loadingFlow = MutableSharedFlow<Boolean>()
     override val messageFlow = MutableSharedFlow<String>()
     override val errorFlow = MutableSharedFlow<Throwable>()
 
-    override suspend fun getRandomProducts() {
-        repository.getRandomProducts().onEach {
-            when (it) {
-                is ResultData.Loading -> {
-                    loadingFlow.emit(true)
-                }
-                is ResultData.Success -> {
-                    loadingFlow.emit(false)
-                    randomProductsFlow.emit(it.data)
-                }
-                is ResultData.Message -> {
-                    loadingFlow.emit(false)
-                    messageFlow.emit(it.message)
-                }
-                is ResultData.Error -> {
-                    loadingFlow.emit(false)
-                    errorFlow.emit(it.error)
-                }
-            }
-        }.launchIn(viewModelScope)
+
+    override fun getRandomProducts() {
+        getRandomProductsFlow.tryEmit(-1)
     }
 
-    override suspend fun getRandomProductsWithoutLimit() {
-        repository.getRandomProductsWithoutLimit().onEach {
-            when (it) {
-                is ResultData.Loading -> {
-                    loadingFlow.emit(true)
-                }
-                is ResultData.Success -> {
-                    loadingFlow.emit(false)
-                    randomProductsFlow.emit(it.data)
-                }
-                is ResultData.Message -> {
-                    loadingFlow.emit(false)
-                    messageFlow.emit(it.message)
-                }
-                is ResultData.Error -> {
-                    loadingFlow.emit(false)
-                    errorFlow.emit(it.error)
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
 
-    override suspend fun getProducts(page: Int, storeId: Int, limit: Int) {
-        repository.getProducts(page, storeId, limit).onEach {
-            when (it) {
-                is ResultData.Loading -> {
-                    loadingFlow.emit(true)
-                }
-                is ResultData.Success -> {
-                    loadingFlow.emit(false)
-                    productsFlow.emit(it.data)
-                }
-                is ResultData.Message -> {
-                    loadingFlow.emit(false)
-                    messageFlow.emit(it.message)
-                }
-                is ResultData.Error -> {
-                    loadingFlow.emit(false)
-                    errorFlow.emit(it.error)
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    override suspend fun productViewed(productId: Int) {
-        repository.productViewed(productId).onEach {
-            when (it) {
-                is ResultData.Loading -> {
-                    loadingFlow.emit(true)
-                }
-                is ResultData.Success -> {
-                    loadingFlow.emit(false)
-                    productViewedFlow.emit(it.data)
-                }
-                is ResultData.Message -> {
-                    loadingFlow.emit(false)
-                    messageFlow.emit(it.message)
-                }
-                is ResultData.Error -> {
-                    loadingFlow.emit(false)
-                    errorFlow.emit(it.error)
-                }
-            }
-        }.launchIn(viewModelScope)
+    override suspend fun getProducts(storeId: Int) {
+        getRandomProductsFlow.tryEmit(storeId)
     }
 }
