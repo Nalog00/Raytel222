@@ -71,6 +71,7 @@ class ShopBottomSheetDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvRaytelSite.text = localStorage.infoTextMessage
         initListeners()
         initObservers()
     }
@@ -81,7 +82,6 @@ class ShopBottomSheetDialog : BottomSheetDialogFragment() {
                 viewModel.getStores(localStorage.selectedStoreId)
             }
 
-            val layoutManager = rvShop.layoutManager as GridLayoutManager
             rvShop.adapter = adapter
 
 

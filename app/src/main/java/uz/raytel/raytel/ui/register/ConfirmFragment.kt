@@ -10,6 +10,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
@@ -27,12 +28,15 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
 import ru.ldralighieri.corbind.widget.textChanges
 import uz.raytel.raytel.R
+import uz.raytel.raytel.app.App
 import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.auth.ConfirmSmsRequestData
 import uz.raytel.raytel.data.remote.auth.SendSmsData
@@ -66,7 +70,7 @@ class ConfirmFragment : Fragment(R.layout.fragment_confirm), TextWatcher,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SmsVerificationReceiver().initOTPListener(this)
+        App.initOTPListener(this)
         navController = findNavController()
         initTimer()
         initListeners()
@@ -157,11 +161,11 @@ class ConfirmFragment : Fragment(R.layout.fragment_confirm), TextWatcher,
             }.launchIn(lifecycleScope)
 
             btnCheck.clicks().debounce(200).onEach {
+                binding.progressBar.show()
                 var code = ""
                 binding.lCode.forEach { view ->
                     code += (view as EditText).text.toString().filter { str -> str.isDigit() }
                 }
-                binding.progressBar.show()
                 viewModel.confirmSmsCode(ConfirmSmsRequestData("998${args.phone}", code.toInt()))
             }.launchIn(lifecycleScope)
 
@@ -176,7 +180,12 @@ class ConfirmFragment : Fragment(R.layout.fragment_confirm), TextWatcher,
 
     override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
         if (editTextArray.filter { it.text.toString().isNotEmpty() }.size == 4) {
-            binding.btnCheck.callOnClick()
+            lifecycleScope.launch {
+
+                binding.progressBar.show()
+                delay(400)
+                binding.btnCheck.callOnClick()
+            }
 
         }
     }
@@ -206,13 +215,14 @@ class ConfirmFragment : Fragment(R.layout.fragment_confirm), TextWatcher,
     }
 
     override fun onOTPReceived(otp: String) {
-        if (otp.length == 4) {
+        if (otp.length == 4 && otp.isDigitsOnly()) {
             binding.etCodeOne.setText(otp[0].toString())
             binding.etCodeTwo.setText(otp[1].toString())
             binding.etCodeThree.setText(otp[2].toString())
             binding.etCodeFour.setText(otp[3].toString())
+
+            binding.progressBar.show()
         }
-        Log.d("TTTT", "$otp this is sample code")
     }
 
     override fun onOTPTimeOut() {

@@ -46,6 +46,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         navController = findNavController()
         initListeners()
         initObservers()
+        startSmsListener()
     }
 
     private fun initObservers() {
@@ -91,7 +92,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                             localStorage.deviceId
                         )
                     )
-                    startSmsListener()
                 } else {
                     binding.etPhoneNumber.error = getString(R.string.error_invalid_phone_number)
                     binding.progressBar.hide()

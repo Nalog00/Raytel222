@@ -11,6 +11,7 @@
         android:name=".app.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +19,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Raytel"
-        android:enableOnBackInvokedCallback="true"
         tools:targetApi="tiramisu">
         <activity
             android:name=".ui.MainActivity"
@@ -33,13 +33,18 @@
             </intent-filter>
 
 
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
 
-        <receiver android:name=".utils.SmsVerificationReceiver"/>
+        <receiver
+            android:name=".utils.SmsVerificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

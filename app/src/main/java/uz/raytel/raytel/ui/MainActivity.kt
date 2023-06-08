@@ -35,8 +35,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         Firebase.database.getReference("online_count")
             .setValue(OnlineCount(Random.nextInt(2000..3000))).addOnFailureListener {
                 it.printStackTrace()
@@ -71,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
         viewModel.confirmDetailsFlow.onEach {
+            localStorage.infoTextMessage = it.data.infoText
             localStorage.lockScreenMessage = it.data.blockText
         }.launchIn(lifecycleScope)
 

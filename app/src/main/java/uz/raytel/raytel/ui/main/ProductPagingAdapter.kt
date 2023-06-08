@@ -11,11 +11,12 @@ import com.bumptech.glide.request.RequestOptions
 import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.ColorFilterTransformation
 import uz.raytel.raytel.R
+import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.product.Product
 import uz.raytel.raytel.databinding.ItemPageBinding
 import uz.raytel.raytel.utils.*
 
-class ProductPagingAdapter() :
+class ProductPagingAdapter(private val localStorage: LocalStorage) :
     PagingDataAdapter<Product, ProductPagingAdapter.ProductViewHolder>(MyDiffUtil) {
 
     inner class ProductViewHolder(private val binding: ItemPageBinding) :
@@ -45,13 +46,10 @@ class ProductPagingAdapter() :
                     tvOnline.isSelected = true
 
 
-                    tvExit.click {
-                        navigate.invoke("exit")
-                    }
-
                     btnLogin.click {
-                        navigate.invoke("login")
+                        navigate.invoke()
                     }
+                    tvTrialExpired.text = localStorage.lockScreenMessage
 
                     ivLogo.click {
                         storeClick.invoke(data.store.id)
@@ -135,8 +133,8 @@ class ProductPagingAdapter() :
         storeClick = block
     }
 
-    private var navigate: (String) -> Unit = {}
-    fun authNavigation(block: (direction: String) -> Unit) {
+    private var navigate: () -> Unit = {}
+    fun authNavigation(block: () -> Unit) {
         navigate = block
     }
 

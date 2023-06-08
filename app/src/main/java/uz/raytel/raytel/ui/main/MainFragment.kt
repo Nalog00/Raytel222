@@ -47,17 +47,19 @@ import kotlin.random.nextInt
 
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
+    @Inject
+    lateinit var localStorage: LocalStorage
+
+    
     private val binding: FragmentMainBinding by viewBinding(FragmentMainBinding::bind)
     private val viewModel: MainViewModel by viewModels<MainViewModelImpl>()
     private val loginViewModel: RegisterViewModel by viewModels<RegisterViewModelImpl>()
-    private val adapter by lazy { ProductPagingAdapter() }
-    private val shopProductAdapter by lazy { ProductPagingAdapter() }
+    private val adapter by lazy { ProductPagingAdapter(localStorage) }
+    private val shopProductAdapter by lazy { ProductPagingAdapter(localStorage) }
     var shopSelected = false
 
     private val sdf = SimpleDateFormat("yyyyMMdd_hhmmss", Locale.ROOT)
 
-    @Inject
-    lateinit var localStorage: LocalStorage
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,31 +92,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     if (shopSelected.not()) {
-                        (requireActivity() as MainActivity).lastViewedProduct = viewPager.currentItem
+                        (requireActivity() as MainActivity).lastViewedProduct =
+                            viewPager.currentItem
                     }
                 }
             })
 
             adapter.authNavigation {
-                when (it) {
-                    "exit" -> {
-                        requireActivity().finish()
-                    }
-                    "login" -> {
-                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegisterFragment())
-                    }
-                }
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegisterFragment())
             }
 
             shopProductAdapter.authNavigation {
-                when (it) {
-                    "exit" -> {
-                        requireActivity().finish()
-                    }
-                    "login" -> {
-                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegisterFragment())
-                    }
-                }
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegisterFragment())
             }
 
             adapter.setOnlineCount {
@@ -182,8 +171,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
 
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
                         if (shopSelected) {

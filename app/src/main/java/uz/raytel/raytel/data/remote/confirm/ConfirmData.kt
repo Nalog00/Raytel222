@@ -9,6 +9,7 @@ data class ConfirmData(
     @SerializedName("card_number") val cardNumber: String,
     @SerializedName("card_holder") val cardHolder: String,
     @SerializedName("end_text") val endText: String,
+    @SerializedName("info_text") val infoText: String,
     val phone: String,
     @SerializedName("block_text") val blockText: String,
     @SerializedName("unblock_text") val unblockText: String

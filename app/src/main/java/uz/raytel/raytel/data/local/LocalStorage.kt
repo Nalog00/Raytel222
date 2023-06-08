@@ -36,4 +36,5 @@ class LocalStorage @Inject constructor(
     var selectedStoreId by IntPreference(pref, defValue = 1)
 
     var lockScreenMessage by StringPreference(pref)
+    var infoTextMessage by StringPreference(pref)
 }
