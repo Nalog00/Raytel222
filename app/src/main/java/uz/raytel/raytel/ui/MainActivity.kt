@@ -1,6 +1,7 @@
 package uz.raytel.raytel.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -15,6 +16,8 @@ import uz.raytel.raytel.data.remote.realtime.OnlineCount
 import uz.raytel.raytel.databinding.ActivityMainBinding
 import uz.raytel.raytel.ui.confirm.ConfirmViewModel
 import uz.raytel.raytel.ui.confirm.ConfirmViewModelImpl
+import uz.raytel.raytel.utils.isNewProduct
+import uz.raytel.raytel.utils.log
 import uz.raytel.raytel.utils.showSnackBar
 import javax.inject.Inject
 import kotlin.random.Random

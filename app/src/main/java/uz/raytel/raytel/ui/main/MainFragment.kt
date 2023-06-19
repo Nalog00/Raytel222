@@ -1,11 +1,8 @@
 package uz.raytel.raytel.ui.main
 
-import android.app.AlertDialog
 import android.app.DownloadManager
-import android.app.Service
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.net.toUri
@@ -25,17 +22,12 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import ru.ldralighieri.corbind.view.clicks
 import uz.raytel.raytel.R
 import uz.raytel.raytel.data.local.LocalStorage
-import uz.raytel.raytel.data.remote.Main
 import uz.raytel.raytel.data.remote.auth.SignInDeviceId
-import uz.raytel.raytel.data.remote.product.Product
 import uz.raytel.raytel.data.remote.realtime.OnlineCount
 import uz.raytel.raytel.databinding.FragmentMainBinding
 import uz.raytel.raytel.ui.MainActivity
-import uz.raytel.raytel.ui.confirm.ConfirmViewModel
-import uz.raytel.raytel.ui.confirm.ConfirmViewModelImpl
 import uz.raytel.raytel.ui.register.RegisterViewModel
 import uz.raytel.raytel.ui.register.RegisterViewModelImpl
 import uz.raytel.raytel.utils.*
@@ -50,7 +42,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     @Inject
     lateinit var localStorage: LocalStorage
 
-    
+
     private val binding: FragmentMainBinding by viewBinding(FragmentMainBinding::bind)
     private val viewModel: MainViewModel by viewModels<MainViewModelImpl>()
     private val loginViewModel: RegisterViewModel by viewModels<RegisterViewModelImpl>()
@@ -171,7 +163,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
 
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
                         if (shopSelected) {
@@ -195,6 +188,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }.launchIn(lifecycleScope)
 
             viewModel.messageFlow.onEach {
+                if (it == "Unauthorized") {
+                    binding.progressBar.show()
+                    loginViewModel.signInDeviceId(SignInDeviceId(localStorage.deviceId))
+                }
                 showSnackBar(requireView(), it)
             }.launchIn(lifecycleScope)
 

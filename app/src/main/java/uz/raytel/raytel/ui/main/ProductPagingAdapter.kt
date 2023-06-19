@@ -39,6 +39,10 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
 
                     if (isNewProduct(data.createdAt)) {
                         binding.ivNew.show()
+                        log("This is createdAt new")
+                    }else{
+                        log("This is createdAt old")
+                        binding.ivNew.hide()
                     }
 
                     tvShopName.text = data.store.name
@@ -78,8 +82,6 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
 
         private fun showLockScreen() {
             binding.apply {
-
-                ivNew.hide()
                 ivLogo.hide()
                 tvShopName.hide()
                 btnScreenshot.hide()
@@ -92,7 +94,6 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
         private fun hideLockScreen() {
             binding.apply {
                 lockView.hide()
-                ivNew.show()
                 ivLogo.show()
                 tvShopName.show()
                 btnScreenshot.show()
