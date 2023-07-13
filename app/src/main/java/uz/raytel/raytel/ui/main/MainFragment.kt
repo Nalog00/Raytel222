@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.firebase.database.DataSnapshot
@@ -27,6 +28,7 @@ import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.auth.SignInDeviceId
 import uz.raytel.raytel.data.remote.realtime.OnlineCount
 import uz.raytel.raytel.databinding.FragmentMainBinding
+import uz.raytel.raytel.di.utils.UnauthorisedException
 import uz.raytel.raytel.ui.MainActivity
 import uz.raytel.raytel.ui.register.RegisterViewModel
 import uz.raytel.raytel.ui.register.RegisterViewModelImpl
@@ -163,8 +165,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
 
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
                         if (shopSelected) {
@@ -188,7 +189,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }.launchIn(lifecycleScope)
 
             viewModel.messageFlow.onEach {
-                if (it == "Unauthorized") {
+                log("MESSAGE FLOW: $it")
+                if (it == "Unauthenticated.") {
                     binding.progressBar.show()
                     loginViewModel.signInDeviceId(SignInDeviceId(localStorage.deviceId))
                 }
@@ -227,7 +229,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     binding.progressBar.hide()
                 }
             }.launchIn(lifecycleScope)
-
 
             if (!localStorage.firstRun) {
                 viewLifecycleOwner.lifecycleScope.launch {

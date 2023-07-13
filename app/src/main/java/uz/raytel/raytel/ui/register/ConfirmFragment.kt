@@ -1,5 +1,7 @@
 package uz.raytel.raytel.ui.register
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -20,6 +22,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.common.api.Status
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -43,6 +48,7 @@ import uz.raytel.raytel.data.remote.auth.SendSmsData
 import uz.raytel.raytel.databinding.FragmentConfirmBinding
 import uz.raytel.raytel.ui.MainActivity
 import uz.raytel.raytel.utils.*
+import uz.raytel.raytel.utils.otp.OTPReceiveListener
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -54,6 +60,7 @@ class ConfirmFragment : Fragment(R.layout.fragment_confirm), TextWatcher,
     private val args: ConfirmFragmentArgs by navArgs()
     private lateinit var navController: NavController
     private var numTemp = ""
+
 
     @Inject
     lateinit var localStorage: LocalStorage

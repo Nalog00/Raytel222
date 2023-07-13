@@ -18,6 +18,7 @@ import uz.raytel.raytel.ui.confirm.ConfirmViewModel
 import uz.raytel.raytel.ui.confirm.ConfirmViewModelImpl
 import uz.raytel.raytel.utils.isNewProduct
 import uz.raytel.raytel.utils.log
+import uz.raytel.raytel.utils.otp.OTPReceiveListener
 import uz.raytel.raytel.utils.showSnackBar
 import javax.inject.Inject
 import kotlin.random.Random
@@ -46,8 +47,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launchWhenCreated {
             viewModel.getDetails()
         }
-
-
 
         initObservers()
         initListeners()

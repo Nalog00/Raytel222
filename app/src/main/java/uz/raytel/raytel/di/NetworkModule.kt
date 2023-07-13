@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import uz.raytel.raytel.app.App
 import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.ApiService
 import javax.inject.Singleton
@@ -27,15 +28,22 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesRaytelInterceptor(localStorage: LocalStorage) = RaytelInterceptor(localStorage)
+    fun providesRaytelInterceptor(localStorage: LocalStorage) = RaytelInterceptor(localStorage, App.INSTANCE)
+
+
+//    @Provides
+//    @Singleton
+//    fun providesErrorInterceptor(localStorage: LocalStorage) = ExceptionHandlerInterceptor(localStorage)
 
 
     @[Provides Singleton]
     fun providesOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        raytelInterceptor: RaytelInterceptor
+        raytelInterceptor: RaytelInterceptor,
+//        exceptionHandlerInterceptor: ExceptionHandlerInterceptor
     ): OkHttpClient = OkHttpClient().newBuilder()
         .addInterceptor(httpLoggingInterceptor)
+//        .addInterceptor(exceptionHandlerInterceptor)
         .addInterceptor(raytelInterceptor)
         .build()
 

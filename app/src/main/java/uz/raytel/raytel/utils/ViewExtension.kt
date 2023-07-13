@@ -110,11 +110,3 @@ fun View.setScreenShotAnimation() {
     })
     this.startAnimation(fade);
 }
-
-private fun scaleFullBitmap(bitmap: Bitmap): Bitmap {
-    val dividingScale = 4
-    val scaledWidth: Int = bitmap.width / dividingScale
-    val scaledHeight: Int = bitmap.height / dividingScale
-
-    return Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true)
-}

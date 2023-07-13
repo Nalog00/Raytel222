@@ -78,19 +78,18 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:ellipsize="marquee"
-            android:gravity="center"
-            android:paddingStart="24dp"
+            android:gravity="center_vertical|start"
+            android:paddingStart="8dp"
             android:paddingEnd="12dp"
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="@id/iv_logo"
             app:layout_constraintEnd_toEndOf="@id/gd_half_guide_line"
-            app:layout_constraintStart_toStartOf="@id/guideline_logo"
+            app:layout_constraintStart_toEndOf="@id/iv_logo"
             app:layout_constraintTop_toTopOf="@id/iv_logo"
             tools:ignore="SpUsage"
-
-            tools:text="Hell askdkankjnd daskjdnasjknd " />
+            tools:text="Raytel" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_logo"
@@ -125,6 +124,17 @@
             tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationZ="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <FrameLayout
@@ -204,9 +214,9 @@
                 android:paddingHorizontal="12dp"
                 android:text="@string/text_sign_in"
                 android:textAllCaps="false"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_lock" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -242,5 +252,7 @@
             tools:ignore="SpUsage" />
 
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

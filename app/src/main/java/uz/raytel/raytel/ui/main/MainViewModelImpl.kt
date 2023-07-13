@@ -8,16 +8,20 @@ import kotlinx.coroutines.flow.*
 import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.GenericResponse
 import uz.raytel.raytel.data.remote.ResultData
+import uz.raytel.raytel.data.remote.auth.SignInDeviceId
 import uz.raytel.raytel.data.remote.paging.PagingResponse
 import uz.raytel.raytel.data.remote.paging.ProductsPagingSourse
 import uz.raytel.raytel.data.remote.product.Product
+import uz.raytel.raytel.di.utils.UnauthorisedException
+import uz.raytel.raytel.domain.repository.AuthRepository
 import uz.raytel.raytel.domain.repository.MainRepository
 import uz.raytel.raytel.domain.repository.Repository
+import uz.raytel.raytel.utils.log
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModelImpl @Inject constructor(
-    private val mainRepository: MainRepository
+    private val mainRepository: MainRepository,
 ) : MainViewModel, ViewModel() {
 
 
@@ -35,7 +39,10 @@ class MainViewModelImpl @Inject constructor(
     private fun newPager(id: Int): Pager<Int, Product> {
         return Pager(PagingConfig(3, enablePlaceholders = false)) {
             newPagingSource?.invalidate()
-            mainRepository.getProducts(id).also { newPagingSource = it }
+
+            mainRepository.getProducts(id).also {
+                newPagingSource = it
+            }
         }
     }
 

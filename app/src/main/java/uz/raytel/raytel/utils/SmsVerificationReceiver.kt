@@ -32,7 +32,6 @@ class SmsVerificationReceiver: BroadcastReceiver() {
     }
 
     interface OTPReceiveListener {
-
         fun onOTPReceived(otp: String)
 
         fun onOTPTimeOut()

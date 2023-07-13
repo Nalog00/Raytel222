@@ -9,6 +9,9 @@ import retrofit2.HttpException
 import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.ApiService
 import uz.raytel.raytel.data.remote.product.Product
+import uz.raytel.raytel.di.utils.UnauthorisedException
+import uz.raytel.raytel.utils.getErrorMessage
+import uz.raytel.raytel.utils.log
 import javax.inject.Inject
 
 class ProductsPagingSourse @AssistedInject constructor(
@@ -32,8 +35,6 @@ class ProductsPagingSourse @AssistedInject constructor(
             )
         }
 
-
-
         return if (response.isSuccessful) {
             val products = checkNotNull(response.body()).data
             val nextKey =
@@ -41,7 +42,11 @@ class ProductsPagingSourse @AssistedInject constructor(
             val prevKey = if (page == 1) null else page - 1
             LoadResult.Page(products, prevKey, nextKey)
         } else {
-            LoadResult.Error(HttpException(response))
+            if (response.code() == 401) {
+                LoadResult.Error(UnauthorisedException())
+            } else {
+                LoadResult.Error(HttpException(response))
+            }
         }
     }
 

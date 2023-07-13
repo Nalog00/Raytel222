@@ -50,8 +50,9 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
         super.onViewCreated(view, savedInstanceState)
 
         initListeners()
-
         initObservers()
+
+
 
 
     }
@@ -139,6 +140,7 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
                 tvDescription.text = getString(R.string.text_pay_money, data.price.toSumFormat)
                 tvCardNumber.text = data.cardNumber
                 tvCardName.text = data.cardHolder
+                log("It is data: $data")
                 icCopy.clickWithDebounce(lifecycleScope) {
                     val manager =
                         requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -151,9 +153,6 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
 
             registerViewModel.newPaymentSuccessFlow.onEach {
                 localStorage.signedIn = true
-//                localStorage.token = it.
-//                if (it.status=="active")
-//                localStorage.signedIn = true
                 requireActivity().finish()
                 requireActivity().startActivity(Intent(requireContext(), MainActivity::class.java))
             }.launchIn(lifecycleScope)

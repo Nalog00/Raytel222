@@ -7,14 +7,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.ResultData
 import uz.raytel.raytel.data.remote.auth.*
+import uz.raytel.raytel.di.utils.UnauthorisedException
 import uz.raytel.raytel.domain.repository.AuthRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModelImpl @Inject constructor(
-    private val repo: AuthRepository
+    private val repo: AuthRepository,
+    private val localStorage: LocalStorage
 ) : RegisterViewModel, ViewModel() {
     override val sendSmsCodeFlow = MutableSharedFlow<SendSmsResponseData>()
     override val getMeFlow = MutableSharedFlow<GetInfoAboutMeData>()

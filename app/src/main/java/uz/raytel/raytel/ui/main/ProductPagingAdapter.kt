@@ -1,16 +1,20 @@
 package uz.raytel.raytel.ui.main
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import jp.wasabeef.glide.transformations.BlurTransformation
-import jp.wasabeef.glide.transformations.ColorFilterTransformation
-import uz.raytel.raytel.R
 import uz.raytel.raytel.data.local.LocalStorage
 import uz.raytel.raytel.data.remote.product.Product
 import uz.raytel.raytel.databinding.ItemPageBinding
@@ -32,15 +36,45 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
 
                     if (data.alert) {
                         Glide.with(binding.root.context).asBitmap().load(data.image)
-                            .apply(RequestOptions.bitmapTransform(BlurTransformation(25))).into(ivImage)
+                            .apply(RequestOptions.bitmapTransform(BlurTransformation(25)))
+                            .into(ivImage)
+                        binding.pbLoading.hide()
                     } else {
-                        ivImage.setImageWithGlide(binding.root.context, data.image)
+                        Glide.with(binding.root.context).load(data.image)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    if (binding.pbLoading.isVisible){
+                                        binding.pbLoading.hide()
+                                    }
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    if (binding.pbLoading.isVisible){
+                                        binding.pbLoading.hide()
+                                    }
+                                    return false
+                                }
+
+                            }).into(ivImage)
+
                     }
 
                     if (isNewProduct(data.createdAt)) {
                         binding.ivNew.show()
                         log("This is createdAt new")
-                    }else{
+                    } else {
                         log("This is createdAt old")
                         binding.ivNew.hide()
                     }
