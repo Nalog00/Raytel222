@@ -52,9 +52,6 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
         initListeners()
         initObservers()
 
-
-
-
     }
 
     private fun initListeners() {

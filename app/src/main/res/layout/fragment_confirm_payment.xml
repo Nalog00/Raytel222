@@ -122,7 +122,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="To'lemdi tastiqlaw ushin check fotosin juklen'"
+        android:fontFamily="@font/rubik_regular"
+        android:textColor="@color/dark_blue_color"
+        android:text="@string/to_confirm_payment_upload_check"
         app:layout_constraintEnd_toEndOf="@id/v_line"
         app:layout_constraintStart_toStartOf="@id/v_line"
         app:layout_constraintTop_toBottomOf="@id/v_line" />

@@ -33,13 +33,14 @@
     <string name="error_invalid_confirm_code">Tekseriw kodı nadurıs kiritildi!</string>
     <string name="error_verification_code_not_sent_yet">Ele tekseriw kodı jiberilmedi!</string>
     <string name="error_image_not_selected">Súwret saylanbadı!</string>
-    <string name="we_will_send_sms_code_to_phone">Sms-kod joqaridag\'i nomerge jiberiledi</string>
+    <string name="we_will_send_sms_code_to_phone">Sms-kod joqarıdaǵı nomerge jiberiledi</string>
     <string name="get_code_again_after">qaytadan kod aliw</string>
     <string name="get_code_again">Qaytadan kod aliw</string>
-    <string name="after_30_seconds">%s sekunndan</string>
+    <string name="after_30_seconds">%s sekundtan soń</string>
     <string name="no_account">Akkauntińiz joqpa?</string>
-    <string name="enter_code_from_sms">Smstag\'i koddi kiritiń</string>
+    <string name="enter_code_from_sms">"SMS"tegi koddi kiritiń</string>
     <string name="trial_time_finished">Sinaw muddeti tawsildi!</string>
-    <string name="pay_to_use_app">Programmadan paydalaniwdi dawam\n ettiriw ushin tolem amelge asiriw</string>
-    <string name="exit">Shig\'iw</string>
+    <string name="pay_to_use_app">Programmadan paydalaniwdi dawam\n ettiriw ushin tólem ámelge asiriw</string>
+    <string name="exit">Shiǵiw</string>
+    <string name="to_confirm_payment_upload_check">Tólemdi tastıyqlaw ushın check fotosın jukleń</string>
 </resources>
