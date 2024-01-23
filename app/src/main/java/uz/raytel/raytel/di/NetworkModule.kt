@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
     companion object {
-        private const val BASE_URL = "https://test.paydali.uz/"
+        private const val BASE_URL = "https://api.raytel.uz/"
     }
 
     @Provides
@@ -31,19 +31,12 @@ class NetworkModule {
     fun providesRaytelInterceptor(localStorage: LocalStorage) = RaytelInterceptor(localStorage, App.INSTANCE)
 
 
-//    @Provides
-//    @Singleton
-//    fun providesErrorInterceptor(localStorage: LocalStorage) = ExceptionHandlerInterceptor(localStorage)
-
-
     @[Provides Singleton]
     fun providesOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         raytelInterceptor: RaytelInterceptor,
-//        exceptionHandlerInterceptor: ExceptionHandlerInterceptor
     ): OkHttpClient = OkHttpClient().newBuilder()
         .addInterceptor(httpLoggingInterceptor)
-//        .addInterceptor(exceptionHandlerInterceptor)
         .addInterceptor(raytelInterceptor)
         .build()
 

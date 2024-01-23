@@ -76,6 +76,4 @@ class MainActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
     }
-
-
 }
