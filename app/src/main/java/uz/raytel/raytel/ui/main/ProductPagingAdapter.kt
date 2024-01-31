@@ -73,9 +73,7 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
 
                     if (isNewProduct(data.createdAt)) {
                         binding.ivNew.show()
-                        log("This is createdAt new")
                     } else {
-                        log("This is createdAt old")
                         binding.ivNew.hide()
                     }
 

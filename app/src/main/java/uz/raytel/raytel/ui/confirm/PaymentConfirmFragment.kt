@@ -63,22 +63,25 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
             btnUpload.clickWithDebounce(lifecycleScope) {
                 pickerDialog {
                     setTitle("Súwretti saylań")
-                    setListType(PickerDialog.ListType.TYPE_LIST)
+                    setListType(PickerDialog.ListType.TYPE_GRID)
                     setItems(setOf(ItemModel(ItemType.ITEM_GALLERY)))
                 }.setPickerCloseListener { _, uris ->
-                    lifecycleScope.launch {
-                        val fileUri = uris.first()
-                        val file = FileUtils.getFile(requireContext(), fileUri)!!
-                        val image = file.asRequestBody("image/*".toMediaTypeOrNull())
-                        imagePart = MultipartBody.Part.createFormData("file[0]", file.name, image)
-                        imageSelected = true
-                    }
-                    binding.tvFileStatus.text = getString(R.string.text_photo_selected)
-                    binding.tvFileStatus.setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(), R.color.color_green
+                    if (uris.isNotEmpty()) {
+                        lifecycleScope.launch {
+                            val fileUri = uris.first()
+                            val file = FileUtils.getFile(requireContext(), fileUri)!!
+                            val image = file.asRequestBody("image/*".toMediaTypeOrNull())
+                            imagePart =
+                                MultipartBody.Part.createFormData("file[0]", file.name, image)
+                            imageSelected = true
+                        }
+                        binding.tvFileStatus.text = getString(R.string.text_photo_selected)
+                        binding.tvFileStatus.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(), R.color.color_green
+                            )
                         )
-                    )
+                    }
                 }.show()
             }
 
@@ -137,7 +140,6 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
                 tvDescription.text = getString(R.string.text_pay_money, data.price.toSumFormat)
                 tvCardNumber.text = data.cardNumber
                 tvCardName.text = data.cardHolder
-                log("It is data: $data")
                 icCopy.clickWithDebounce(lifecycleScope) {
                     val manager =
                         requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
