@@ -12,6 +12,7 @@ import uz.raytel.raytel.data.remote.product.Product
 import uz.raytel.raytel.di.utils.UnauthorisedException
 import uz.raytel.raytel.utils.getErrorMessage
 import uz.raytel.raytel.utils.log
+import java.io.IOException
 import javax.inject.Inject
 
 class ProductsPagingSourse @AssistedInject constructor(
@@ -27,27 +28,32 @@ class ProductsPagingSourse @AssistedInject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 1
-        val response = if (id != -1) {
-            api.getProducts(page, id, 3)
-        } else {
-            if (isSignedUp.not()) api.getRandomProducts(page) else api.getRandomProductsWithoutLimit(
-                page
+        try {
+            val response = if (id != -1) {
+                api.getProducts(page, id, 3)
+            } else {
+                if (isSignedUp.not()) api.getRandomProducts(page) else api.getRandomProductsWithoutLimit(
+                    page
+                )
+            }
+            if (response.code() == 401) {
+                return LoadResult.Error(UnauthorisedException())
+            } else if (response.isSuccessful.not()) {
+                return LoadResult.Error(HttpException(response))
+            }
+            val responseBody = response.body()!!
+            val nextKey = if (responseBody.data.isEmpty()) null else page + 1
+            return LoadResult.Page(
+                data = responseBody.data,
+                prevKey = if (page == 1) null else page,
+                nextKey = nextKey
             )
+        } catch (exception: IOException) {
+            return LoadResult.Error(exception)
+        } catch (e: HttpException) {
+            return LoadResult.Error(e)
         }
 
-        return if (response.isSuccessful) {
-            val products = checkNotNull(response.body()).data
-            val nextKey =
-                if (page == checkNotNull(response.body()).pagination.totalPages) null else page + 1
-            val prevKey = if (page == 1) null else page - 1
-            LoadResult.Page(products, prevKey, nextKey)
-        } else {
-            if (response.code() == 401) {
-                LoadResult.Error(UnauthorisedException())
-            } else {
-                LoadResult.Error(HttpException(response))
-            }
-        }
     }
 
     @AssistedFactory
