@@ -73,6 +73,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.confirmDetailsFlow.onEach {
             localStorage.infoTextMessage = it.data.infoText
             localStorage.lockScreenMessage = it.data.blockText
+            localStorage.description = it.data.description
+            localStorage.endText = it.data.endText
         }.launchIn(lifecycleScope)
 
     }

@@ -48,7 +48,7 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
                                     target: Target<Drawable>?,
                                     isFirstResource: Boolean
                                 ): Boolean {
-                                    if (binding.pbLoading.isVisible){
+                                    if (binding.pbLoading.isVisible) {
                                         binding.pbLoading.hide()
                                     }
                                     return false
@@ -61,7 +61,7 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
                                     dataSource: DataSource?,
                                     isFirstResource: Boolean
                                 ): Boolean {
-                                    if (binding.pbLoading.isVisible){
+                                    if (binding.pbLoading.isVisible) {
                                         binding.pbLoading.hide()
                                     }
                                     return false
@@ -79,6 +79,7 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
 
                     tvShopName.text = data.store.name
                     tvShopName.isSelected = true
+                    tvPayToUse.text = localStorage.description
                     tvOnline.isSelected = true
 
 
@@ -118,8 +119,6 @@ class ProductPagingAdapter(private val localStorage: LocalStorage) :
                 tvShopName.hide()
                 btnScreenshot.hide()
                 lockView.show()
-
-
             }
         }
 

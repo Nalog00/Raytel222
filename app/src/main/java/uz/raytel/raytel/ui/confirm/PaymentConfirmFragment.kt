@@ -137,14 +137,13 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
 
             confirmViewModel.confirmDetailsFlow.onEach {
                 val data = it.data
-                tvDescription.text = getString(R.string.text_pay_money, data.price.toSumFormat)
+                tvDescription.text = localStorage.endText
                 tvCardNumber.text = data.cardNumber
                 tvCardName.text = data.cardHolder
                 icCopy.clickWithDebounce(lifecycleScope) {
                     val manager =
                         requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData = ClipData.newPlainText(
-                        "CardNumber",
+                    val clipData = ClipData.newPlainText("CardNumber",
                         data.cardNumber.filter { c -> c.isDigit() })
                     manager.setPrimaryClip(clipData)
                 }
