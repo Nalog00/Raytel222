@@ -48,8 +48,6 @@ import uz.raytel.raytel.data.remote.auth.SendSmsData
 import uz.raytel.raytel.databinding.FragmentConfirmBinding
 import uz.raytel.raytel.ui.MainActivity
 import uz.raytel.raytel.utils.*
-import uz.raytel.raytel.utils.otp.OTPReceiveListener
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint

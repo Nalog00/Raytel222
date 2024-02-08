@@ -1,23 +1,21 @@
 package uz.raytel.raytel.ui.confirm
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -62,9 +60,9 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
 
         binding.apply {
             btnUpload.clickWithDebounce(lifecycleScope) {
-                ImagePicker.with(this@PaymentConfirmFragment).galleryOnly().createIntent { intent ->
-                    startForProfileImageResult.launch(intent)
-                }
+                val request =
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                pickMultipleMedia.launch(request)
             }
 
             btnFinish.clickWithDebounce(lifecycleScope) {
@@ -125,8 +123,7 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
                 icCopy.clickWithDebounce(lifecycleScope) {
                     val manager =
                         requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData = ClipData.newPlainText(
-                        "CardNumber",
+                    val clipData = ClipData.newPlainText("CardNumber",
                         data.cardNumber.filter { c -> c.isDigit() })
                     manager.setPrimaryClip(clipData)
                 }
@@ -141,17 +138,17 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
         }
     }
 
-    private val startForProfileImageResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            val resultCode = result.resultCode
-            val data = result.data
-
-            if (resultCode == Activity.RESULT_OK) {
-                //Image Uri will not be null for RESULT_OK
-                val fileUri = data?.data!!
+    private val pickMultipleMedia = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { tempUri ->
+        if (tempUri != null) {
+            lifecycleScope.launch {
+                val realFileFromTempUri = FileUtils.getRealImageUriFromTemporaryUri(
+                    requireContext(), tempUri
+                )
 
                 lifecycleScope.launch {
-                    val file = FileUtils.getFile(requireContext(), fileUri)!!
+                    val file = realFileFromTempUri.toFile()
                     val image = file.asRequestBody("image/*".toMediaTypeOrNull())
                     imagePart = MultipartBody.Part.createFormData("file[0]", file.name, image)
                     imageSelected = true
@@ -162,10 +159,8 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
                         requireContext(), R.color.color_green
                     )
                 )
-            } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT)
-                    .show()
             }
         }
+    }
 }
 
