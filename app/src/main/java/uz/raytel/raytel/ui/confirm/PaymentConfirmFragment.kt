@@ -1,11 +1,15 @@
 package uz.raytel.raytel.ui.confirm
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -13,10 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.robertlevonyan.components.picker.ItemModel
-import com.robertlevonyan.components.picker.ItemType
-import com.robertlevonyan.components.picker.PickerDialog
-import com.robertlevonyan.components.picker.pickerDialog
+import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -61,28 +62,9 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
 
         binding.apply {
             btnUpload.clickWithDebounce(lifecycleScope) {
-                pickerDialog {
-                    setTitle("Súwretti saylań")
-                    setListType(PickerDialog.ListType.TYPE_GRID)
-                    setItems(setOf(ItemModel(ItemType.ITEM_GALLERY)))
-                }.setPickerCloseListener { _, uris ->
-                    if (uris.isNotEmpty()) {
-                        lifecycleScope.launch {
-                            val fileUri = uris.first()
-                            val file = FileUtils.getFile(requireContext(), fileUri)!!
-                            val image = file.asRequestBody("image/*".toMediaTypeOrNull())
-                            imagePart =
-                                MultipartBody.Part.createFormData("file[0]", file.name, image)
-                            imageSelected = true
-                        }
-                        binding.tvFileStatus.text = getString(R.string.text_photo_selected)
-                        binding.tvFileStatus.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(), R.color.color_green
-                            )
-                        )
-                    }
-                }.show()
+                ImagePicker.with(this@PaymentConfirmFragment).galleryOnly().createIntent { intent ->
+                    startForProfileImageResult.launch(intent)
+                }
             }
 
             btnFinish.clickWithDebounce(lifecycleScope) {
@@ -143,7 +125,8 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
                 icCopy.clickWithDebounce(lifecycleScope) {
                     val manager =
                         requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clipData = ClipData.newPlainText("CardNumber",
+                    val clipData = ClipData.newPlainText(
+                        "CardNumber",
                         data.cardNumber.filter { c -> c.isDigit() })
                     manager.setPrimaryClip(clipData)
                 }
@@ -157,5 +140,32 @@ class PaymentConfirmFragment : Fragment(R.layout.fragment_confirm_payment) {
 
         }
     }
+
+    private val startForProfileImageResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val resultCode = result.resultCode
+            val data = result.data
+
+            if (resultCode == Activity.RESULT_OK) {
+                //Image Uri will not be null for RESULT_OK
+                val fileUri = data?.data!!
+
+                lifecycleScope.launch {
+                    val file = FileUtils.getFile(requireContext(), fileUri)!!
+                    val image = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    imagePart = MultipartBody.Part.createFormData("file[0]", file.name, image)
+                    imageSelected = true
+                }
+                binding.tvFileStatus.text = getString(R.string.text_photo_selected)
+                binding.tvFileStatus.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(), R.color.color_green
+                    )
+                )
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
 }
 
