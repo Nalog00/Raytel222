@@ -39,4 +39,5 @@ class LocalStorage @Inject constructor(
     var endText by StringPreference(pref)
     var infoTextMessage by StringPreference(pref)
     var description by StringPreference(pref)
+
 }
